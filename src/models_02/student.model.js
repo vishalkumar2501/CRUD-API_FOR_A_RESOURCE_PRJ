@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// 1. Schema Definition (Data ka Blueprint)
 const studentSchema = new mongoose.Schema(
     {
         name: {
@@ -9,26 +10,29 @@ const studentSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: true,
-            unique: true
-        },
-        mobile_no: {
-            type: Number,
-            required: true,
+            required: [true, 'Student email is required'],
             unique: true,
-            min: 10
+            lowercase: true,
+            trim: true
         },
-        age : {
+        age: {
             type: Number,
-            required : true,
-            min : 18,
-            max : 60
+            required: [true, 'Student age is required'],
+            min: [1, 'Age must be at least 1']
         },
-        gender: {
+        course: {
             type: String,
-            enum: ['Male', 'Female', 'Other']
+            required: [true, 'Course name is required'],
+            trim: true
         }
+    },
+    {
+        timestamps: true // Ye automatically createdAt aur updatedAt fields add karega
+    }
+);
 
-        
-    });
-    
+// 2. Model Creation
+const Student = mongoose.model('Student', studentSchema);
+
+// 3. Export
+module.exports = Student;
