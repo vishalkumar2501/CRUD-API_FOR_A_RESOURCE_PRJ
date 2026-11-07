@@ -8,6 +8,6 @@ connectDB();
 
 
 
-app.listen(3000, () => {
-    console.log(`server isn running on port no :3000`);
+app.listen(5000, () => {
+    console.log(`server isn running on port no :5000`);
 })
