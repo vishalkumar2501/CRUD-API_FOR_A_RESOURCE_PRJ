@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// 1. Schema Definition (Data ka Blueprint)
 const studentSchema = new mongoose.Schema(
     {
         name: {
@@ -27,12 +26,10 @@ const studentSchema = new mongoose.Schema(
         }
     },
     {
-        timestamps: true // Ye automatically createdAt aur updatedAt fields add karega
+        timestamps: true
     }
 );
 
-// 2. Model Creation
-const Student = mongoose.model('Student', studentSchema);
+const studentModel = mongoose.model('Student', studentSchema);
 
-// 3. Export
-module.exports = Student;
+module.exports = studentModel;

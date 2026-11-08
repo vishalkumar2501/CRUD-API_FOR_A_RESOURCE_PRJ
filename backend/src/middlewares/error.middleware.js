@@ -1,26 +1,22 @@
-// ---------------------------------------------------------------------------
-// 1. 404 NOT FOUND MIDDLEWARE
-
+// 404 Not Found Middleware
 function notFoundHandler(req, res, next) {
     const error = new Error(`Route not found: ${req.originalUrl}`);
     res.status(404);
     next(error);
 }
 
-// ---------------------------------------------------------------------------
-// 2. CENTRALIZED GLOBAL ERROR HANDLER
-
+// Centralized Global Error Handler
 function errorHandler(err, req, res, next) {
     let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
     let message = err.message || "Internal server error";
 
-    // Mongoose Invalid ObjectId Error (CastError)
+    // Invalid ObjectId format (CastError)
     if (err.name === 'CastError') {
         statusCode = 400;
         message = `Invalid ID format: ${err.value}`;
     }
 
-    // Mongoose Duplicate Key Error (code: 11000)
+    // Duplicate Key (11000)
     if (err.code === 11000) {
         statusCode = 400;
         const field = Object.keys(err.keyValue)[0];

@@ -1,20 +1,16 @@
 const studentModel = require('../models/student.model');
 
-// ---------------------------------------------------------------------------
-// 1. CREATE STUDENT (POST /api/students)
-// ---------------------------------------------------------------------------
+// Create Student
 async function createStudent(req, res, next) {
     try {
         const { name, email, age, course } = req.body;
 
-        // Validation: Saare fields check karo
         if (!name || !email || !age || !course) {
             return res.status(400).json({
                 message: "All fields (name, email, age, course) are required"
             });
         }
 
-        // Duplicate Check: Kya ye email pehle se exist karta hai?
         const isStudentExist = await studentModel.findOne({ 
             email: email.toLowerCase().trim() 
         });
@@ -25,7 +21,6 @@ async function createStudent(req, res, next) {
             });
         }
 
-        // Database Entry: Naya student document create karo
         const student = await studentModel.create({
             name: name.trim(),
             email: email.toLowerCase().trim(),
@@ -33,7 +28,6 @@ async function createStudent(req, res, next) {
             course: course.trim()
         });
 
-        // Success Response
         return res.status(201).json({
             message: "Student created successfully",
             student: student
@@ -44,9 +38,7 @@ async function createStudent(req, res, next) {
     }
 }
 
-// ---------------------------------------------------------------------------
-// 2. GET ALL STUDENTS (GET /api/students)
-// ---------------------------------------------------------------------------
+// Get All Students
 async function getAllStudents(req, res, next) {
     try {
         const students = await studentModel.find().sort({ createdAt: -1 });
@@ -62,9 +54,7 @@ async function getAllStudents(req, res, next) {
     }
 }
 
-// ---------------------------------------------------------------------------
-// 3. GET STUDENT BY ID (GET /api/students/:id)
-// ---------------------------------------------------------------------------
+// Get Student by ID
 async function getStudentById(req, res, next) {
     try {
         const { id } = req.params;
@@ -87,9 +77,7 @@ async function getStudentById(req, res, next) {
     }
 }
 
-// ---------------------------------------------------------------------------
-// 4. UPDATE STUDENT (PUT /api/students/:id)
-// ---------------------------------------------------------------------------
+// Update Student
 async function updateStudent(req, res, next) {
     try {
         const { id } = req.params;
@@ -125,9 +113,7 @@ async function updateStudent(req, res, next) {
     }
 }
 
-// ---------------------------------------------------------------------------
-// 5. DELETE STUDENT (DELETE /api/students/:id)
-// ---------------------------------------------------------------------------
+// Delete Student
 async function deleteStudent(req, res, next) {
     try {
         const { id } = req.params;
