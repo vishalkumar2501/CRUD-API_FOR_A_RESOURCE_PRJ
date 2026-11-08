@@ -3,16 +3,29 @@ const studentController = require('../controllers/student.controller');
 
 const router = express.Router();
 
-// STUDENT ROUTES (Industry-Standard RESTful)
-
-
-// 1. Create Student (POST /api/students)
+// ---------------------------------------------------------------------------
+// 1. CREATE STUDENT (POST /api/students)
+// ---------------------------------------------------------------------------
 router.post('/', studentController.createStudent);
 
-// 2. Get All Students (GET /api/students)
+// ---------------------------------------------------------------------------
+// 2. GET ALL STUDENTS (GET /api/students)
+// ---------------------------------------------------------------------------
 router.get('/', studentController.getAllStudents);
 
-// 3. Get Student By ID (GET /api/students/:id)
+// ---------------------------------------------------------------------------
+// 3. GET STUDENT BY ID (GET /api/students/:id)
+// ---------------------------------------------------------------------------
 router.get('/:id', studentController.getStudentById);
+
+// ---------------------------------------------------------------------------
+// 4. UPDATE STUDENT (PUT /api/students/:id)
+// ---------------------------------------------------------------------------
+router.put('/:id', studentController.updateStudent);
+
+// ---------------------------------------------------------------------------
+// 5. DELETE STUDENT (DELETE /api/students/:id)
+// ---------------------------------------------------------------------------
+router.delete('/:id', studentController.deleteStudent);
 
 module.exports = router;

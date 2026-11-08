@@ -1,8 +1,9 @@
 const studentModel = require('../models/student.model');
 
-
+// ---------------------------------------------------------------------------
 // 1. CREATE STUDENT (POST /api/students)
-async function createStudent(req, res) {
+// ---------------------------------------------------------------------------
+async function createStudent(req, res, next) {
     try {
         const { name, email, age, course } = req.body;
 
@@ -39,18 +40,15 @@ async function createStudent(req, res) {
         });
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message || "Internal server error"
-        });
+        next(error);
     }
 }
 
-
+// ---------------------------------------------------------------------------
 // 2. GET ALL STUDENTS (GET /api/students)
-
-async function getAllStudents(req, res) {
+// ---------------------------------------------------------------------------
+async function getAllStudents(req, res, next) {
     try {
-        // Database se saare students lekar aao (latest pehle)
         const students = await studentModel.find().sort({ createdAt: -1 });
 
         return res.status(200).json({
@@ -60,20 +58,17 @@ async function getAllStudents(req, res) {
         });
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message || "Internal server error"
-        });
+        next(error);
     }
 }
 
-
+// ---------------------------------------------------------------------------
 // 3. GET STUDENT BY ID (GET /api/students/:id)
-
-async function getStudentById(req, res) {
+// ---------------------------------------------------------------------------
+async function getStudentById(req, res, next) {
     try {
         const { id } = req.params;
 
-        // ID se specific student dhundho
         const student = await studentModel.findById(id);
 
         if (!student) {
@@ -88,14 +83,77 @@ async function getStudentById(req, res) {
         });
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message || "Internal server error"
+        next(error);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 4. UPDATE STUDENT (PUT /api/students/:id)
+// ---------------------------------------------------------------------------
+async function updateStudent(req, res, next) {
+    try {
+        const { id } = req.params;
+        const { name, email, age, course } = req.body;
+
+        const updatedStudent = await studentModel.findByIdAndUpdate(
+            id,
+            {
+                ...(name && { name: name.trim() }),
+                ...(email && { email: email.toLowerCase().trim() }),
+                ...(age && { age }),
+                ...(course && { course: course.trim() })
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedStudent) {
+            return res.status(404).json({
+                message: "Student not found with the provided ID"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Student updated successfully",
+            student: updatedStudent
         });
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 5. DELETE STUDENT (DELETE /api/students/:id)
+// ---------------------------------------------------------------------------
+async function deleteStudent(req, res, next) {
+    try {
+        const { id } = req.params;
+
+        const deletedStudent = await studentModel.findByIdAndDelete(id);
+
+        if (!deletedStudent) {
+            return res.status(404).json({
+                message: "Student not found with the provided ID"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Student deleted successfully",
+            student: deletedStudent
+        });
+
+    } catch (error) {
+        next(error);
     }
 }
 
 module.exports = {
     createStudent,
     getAllStudents,
-    getStudentById
+    getStudentById,
+    updateStudent,
+    deleteStudent
 };
