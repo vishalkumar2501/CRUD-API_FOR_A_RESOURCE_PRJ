@@ -45,9 +45,9 @@ async function createStudent(req, res) {
     }
 }
 
-// ==========================================
+
 // 2. GET ALL STUDENTS (GET /api/students)
-// ==========================================
+
 async function getAllStudents(req, res) {
     try {
         // Database se saare students lekar aao (latest pehle)
@@ -66,9 +66,9 @@ async function getAllStudents(req, res) {
     }
 }
 
-// ==========================================
+
 // 3. GET STUDENT BY ID (GET /api/students/:id)
-// ==========================================
+
 async function getStudentById(req, res) {
     try {
         const { id } = req.params;
